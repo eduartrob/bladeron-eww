@@ -1,15 +1,15 @@
-# 🌸 Mimosa Eww Theme (Port for Ubuntu/GNOME)
+# 🌸 Bladeron Theme (Port for Ubuntu/GNOME)
 
-Este es un port completo tema "BlADERON", reescrito utilizando **Eww** (Widgets).
+This is a complete port of the "Bladeron" theme, rewritten using **Eww** (Widgets).
 
-Ha sido optimizado específicamente para funcionar en **Ubuntu con GNOME (Wayland)**, utilizando el backend X11 para garantizar compatibilidad visual y posicionamiento correcto (z-index).
+It has been specifically optimized to work on **Ubuntu with GNOME (Wayland)**, using the X11 backend to ensure visual compatibility and correct positioning (z-index).
 
-## 📋 Requisitos Previos
+## 📋 Prerequisites
 
-Antes de empezar, necesitas instalar las herramientas de sistema, fuentes y dependencias de compilación.
+Before starting, you need to install system tools, fonts, and build dependencies.
 
-### 1. Instalar Dependencias del Sistema
-Copia y pega este comando en tu terminal:
+### 1. Install System Dependencies
+Copy and paste this command into your terminal:
 
 ```bash
 sudo apt update
@@ -18,65 +18,63 @@ sudo apt install -y \
     build-essential libgtk-3-dev libgdk-pixbuf2.0-dev libcairo2-dev \
     libpango1.0-dev libx11-dev libxinerama-dev cargo rustc \
     fonts-roboto fonts-font-awesome
-
-
+    
 ```
 
-2. Compilar e Instalar Eww
-Para garantizar la compatibilidad con GNOME, compilaremos Eww manualmente con soporte para X11.
+2. Compile and Install Eww
+To ensure compatibility with GNOME, we will manually compile Eww with X11 support.
 
 
 
-
-# Clonar el repositorio oficial de Eww
+# Clone the official Eww repository
 git clone [https://github.com/elkowar/eww.git](https://github.com/elkowar/eww.git)
 cd eww
 
-# Compilar con el flag de X11 (Crucial para posicionamiento en GNOME)
+# Compile with the X11 flag (Crucial for positioning in GNOME)
 cargo build --release --no-default-features --features=x11
 
-# Instalar el binario en tu sistema
+# Install the binary to your system
 cd target/release
 chmod +x eww
 sudo cp eww /usr/local/bin/
 
-# Verificar instalación
+# Verify installation
 eww --version
 
 
+3. Install the Theme (This Repository)
+Download the configuration and scripts to your user folder.
 
-3. Instalar el Tema (Este Repositorio)
-Descarga la configuración y scripts en tu carpeta de usuario.
+Bash
 
-
-# Si ya tienes una carpeta eww, haz un backup primero
+# If you already have an eww folder, make a backup first
 # mv ~/.config/eww ~/.config/eww.bak
 
 git clone [https://github.com/TU_USUARIO/dotfiles-eww.git](https://github.com/TU_USUARIO/dotfiles-eww.git) ~/.config/eww
 
-# Dar permisos de ejecución a los scripts
+# Give execution permissions to the scripts
 chmod +x ~/.config/eww/launch.sh
 chmod +x ~/.config/eww/scripts/*.sh
 
 
-4. Configuración de API (Clima)
-Para que el widget del clima funcione, necesitas una API Key gratuita de OpenWeatherMap.
+4. API Configuration (Weather)
+For the weather widget to work, you need a free OpenWeatherMap API Key.
 
-Regístrate en openweathermap.org y obtén tu API Key gratuita.
+Register at openweathermap.org and get your free API Key.
 
-Ejecuta el siguiente comando para configurar tu clave (reemplaza TU_CLAVE_AQUI por la real):
+Run the following command to configure your key (replace TU_CLAVE_AQUI with the real one):
 
+Bash
 
-# Esto crea el archivo de secretos que es ignorado por Git
+# This creates the secrets file which is ignored by Git
 echo '#!/bin/bash' > ~/.config/eww/scripts/secrets.sh
 echo 'export WEATHER_API_KEY="TU_CLAVE_AQUI"' >> ~/.config/eww/scripts/secrets.sh
 
 
+5. Autostart (Startup)
+To make the widget appear automatically upon login, generate a .desktop file. Copy and paste the entire block:
 
-5. Auto-arranque (Startup)
-Para que el widget aparezca automáticamente al iniciar sesión, generamos un archivo .desktop. Copia y pega todo el bloque:
-
-
+Bash
 
 mkdir -p ~/.config/autostart
 cat << EOF > ~/.config/autostart/eww-mimosa.desktop
@@ -91,18 +89,19 @@ X-GNOME-Autostart-enabled=true
 EOF
 
 
-▶️ Control Manual
-Si necesitas reiniciar el widget o probar cambios:
 
-Iniciar: ~/.config/eww/launch.sh
+▶️ Manual Control
+If you need to restart the widget or test changes:
 
-Detener: killall -9 eww
+Start: ~/.config/eww/launch.sh
 
-Logs (Errores): eww logs
+Stop: killall -9 eww
 
-🧩 Créditos y Recursos
+Logs (Errors): eww logs
+
+🧩 Credits and Resources
 Original Idea: Closebox73 (Conky Theme).
 
 Backend: Eww (ElKowars Wacky Widgets).
 
-Port & Scripts: [Tu Nombre / Usuario]
+Port & Scripts: [Your Name / User]
