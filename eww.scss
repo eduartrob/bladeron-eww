@@ -1,0 +1,63 @@
+* {
+  all: unset;
+  font-family: "Roboto", "Font Awesome 6 Free", sans-serif;
+}
+
+$bg: #1a1b26; $card-bg: #16161e; $fg: #c0caf5;
+$blue: #7aa2f7; $purple: #bb9af7; $pink: #f7768e; $orange: #e0af68; $grey: #414868;
+
+.main-container { padding: 5px; }
+
+// HEADER
+.time { font-size: 90px; font-weight: 300; color: #ffffff; letter-spacing: -2px; }
+.date { font-size: 16px; color: $fg; margin-top: -8px; }
+
+// CARDS
+.card { background-color: $card-bg; border-radius: 18px; padding: 15px; }
+
+// CLIMA
+.weather-icon { font-size: 30px; color: #ffffff; margin-right: 8px; }
+.weather-temp { font-size: 30px; color: #ffffff; font-weight: bold;}
+.city { font-size: 16px; color: $purple; font-weight: bold; }
+.weather-text { font-size: 13px; color: $fg; }
+.weather-sub { font-size: 12px; color: #7F7F9F; font-weight: bold; margin-top: 4px; }
+
+// RED
+.net-ssid { font-size: 15px; color: #ffffff; font-weight: bold; margin-bottom: 10px; }
+.net-label { font-size: 14px; color: $fg; font-weight: bold; }
+.net-graph { margin-top: 4px; background-color: #24283b; border-radius: 6px; padding: 3px; }
+.net-graph.down { color: $purple; } .net-graph.up { color: $pink; }
+.net-section { margin-bottom: 10px; }
+
+// ANILLOS
+.rings-box { padding: 15px 5px; }
+circular-progress { background-color: #24283b; min-height: 50px; min-width: 50px; margin-bottom: 2px; }
+.ring-icon { font-size: 25px; color: #ffffff; }
+.ring-label { font-size: 14px; font-weight: bold; color: #ffffff; margin-top: 5px }
+.ring-name { font-size: 13px; color: #7F7F9F; margin-top: 1px; font-weight: bold; }
+.blue { color: $blue; } .purple { color: $purple; } .pink { color: $pink; } .orange { color: $orange; }
+
+// STORAGE
+.card-title { font-size: 16px; font-weight: bold; color: #ffffff; margin-bottom: 8px; }
+.store-label { font-size: 13px; color: $fg; font-weight: bold;} 
+.store-label-size { font-size: 12px; color: #7F7F9F; }
+
+// MÚSICA
+.music-icon { font-size: 26px; color: #ffffff; }
+.music-info { margin-top: 25px; }
+.music-lbl { font-size: 11px; color: $grey; }
+.music-title { font-size: 15px; color: $pink; font-weight: bold; }
+.music-sub { font-size: 12px; color: $fg; font-style: italic; }
+
+// BOTÓN DE MÚSICA (Quitar estilos por defecto)
+.music-btn { 
+  all: unset; 
+}
+.music-btn:hover > .card {
+  // Efecto sutil al pasar el mouse (opcional)
+  background-color: #1f1f2e;
+}
+
+// BARRAS
+progress { background-color: #24283b; min-height: 6px; border-radius: 3px; }
+progress trough highlight { background-color: $blue; border-radius: 3px; min-height: 6px; }

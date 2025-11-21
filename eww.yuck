@@ -1,0 +1,116 @@
+;; VARIABLES
+(defpoll time :interval "1s" "date '+%H:%M'")
+(defpoll date :interval "1s" "date '+%A %d %B'")
+(deflisten net :initial '{"ssid": "-", "down": {"txt": "0B/s", "val": 0.0, "max_txt": "0B/s", "max_val": 100.0}, "up": {"txt": "0B/s", "val": 0.0, "max_txt": "0B/s", "max_val": 100.0}}' "~/.config/eww/scripts/net.sh")
+(defpoll weather :interval "10m" :initial '{"temp": "--", "desc": "...", "icon": "", "city": "...", "wind": "-", "hum": "-"}' "~/.config/eww/scripts/weather.sh")
+(defpoll disks :interval "1m" :initial "[]" "~/.config/eww/scripts/get_disks.sh")
+
+;; NUEVO: Variable de música (se actualiza cada segundo)
+(defpoll music :interval "1s" :initial '{"title": "...", "artist": "...", "icon": "", "lbl": "..."}' "~/.config/eww/scripts/music.sh")
+
+;; VENTANA PRINCIPAL
+(defwindow mimosa_full
+  :monitor 0
+  :geometry (geometry :x "-30px" :y "40px" :width "340px" :height "600px" :anchor "top right")
+  :stacking "bg"
+  :windowtype "desktop"
+  :wm-ignore false
+  (dashboard_layout)
+)
+
+(defwidget dashboard_layout []
+  (box :class "main-container" :orientation "v" :space-evenly false :spacing 15
+    
+    ;; HEADER
+    (box :class "header" :orientation "v" :space-evenly false
+      (label :class "time" :text time :halign "end")
+      (label :class "date" :text date :halign "end")
+    )
+
+    ;; FILA 1: CLIMA Y RED
+    (box :orientation "h" :space-evenly true :spacing 12
+      
+      ;; CLIMA
+      (box :class "card weather-box" :orientation "v" :space-evenly false :spacing 10
+        (box :orientation "h" :space-evenly false :spacing 20 :valign "center"
+          (label :class "weather-icon" :text {weather.icon})
+          (label :class "weather-temp" :text {weather.temp})
+        )
+        (box :orientation "v" :space-evenly false :spacing 7 :valign "center"
+          (label :class "city" :text {weather.city} :halign "start" :limit-width 12)
+          (label :class "weather-text" :text {weather.desc} :halign "start" :limit-width 18)
+        )
+        (box :orientation "v" :space-evenly false :spacing 1 :valign "center"
+          (label :class "weather-sub" :text "Viento: ${weather.wind}" :halign "start")
+          (label :class "weather-sub" :text "Hum: ${weather.hum}" :halign "start")
+        )
+      )
+      
+      ;; RED
+      (box :class "card network-box" :orientation "v" :space-evenly false
+        (label :class "net-ssid" :text " ${net.ssid}" :halign "start" :limit-width 12 :show-truncated true)
+        (box :orientation "v" :space-evenly false :class "net-section"
+          (box :orientation "h" :space-evenly true
+            (label :class "net-label" :text "Dn: ${net.down.txt}" :halign "start")
+          )
+          (graph :class "net-graph down" :value {net.down.val} :thickness 2 :min 0 :max {net.down.max_val} :dynamic true :time-range "60s" :line-style "round" :height 35 :hexpand true)
+        )
+        (box :orientation "v" :space-evenly false :class "net-section"
+          (box :orientation "h" :space-evenly true
+            (label :class "net-label" :text "Up: ${net.up.txt}" :halign "start")
+          )
+          (graph :class "net-graph up" :value {net.up.val} :thickness 2 :min 0 :max {net.up.max_val} :dynamic true :time-range "60s" :line-style "round" :height 35 :hexpand true)
+        )
+      )
+    )
+
+    ;; FILA 2: ANILLOS
+    (box :class "card rings-box" :orientation "h" :space-evenly true
+      (ring_item :val {EWW_CPU.avg} :icon "" :color "blue" :label "${round(EWW_CPU.avg, 0)}%" :name "CPU")
+      (ring_item :val {EWW_RAM.used_mem_perc} :icon "" :color "purple" :label "${round(EWW_RAM.used_mem_perc, 0)}%" :name "RAM")
+      (ring_item :val {EWW_BATTERY.BAT1.capacity} :icon "" :color "pink" :label "${EWW_BATTERY.BAT1.capacity}%" :name "BAT")
+      (ring_item :val 66 :icon "" :color "orange" :label "66°C" :name "TEMP")
+    )
+
+    ;; FILA 3: STORAGE Y MÚSICA
+    (box :orientation "h" :space-evenly true :spacing 12
+      
+      ;; STORAGE
+      (box :class "card storage-box" :orientation "v" :space-evenly false :spacing 10
+        (label :class "card-title" :text "Discos" :halign "start")
+        (box :orientation "v" :space-evenly false :spacing 10
+          (for disk in disks
+            (box :orientation "v" :space-evenly false :spacing 10
+               (box :orientation "h" :space-evenly true
+                  (label :class "store-label" :text "${disk.mount}" :halign "start" :limit-width 9 :show-truncated true)
+                  (label :class "store-label-size" :text "${disk.perc}%" :halign "end")
+               )
+               (progress :class "prog-bar" :value {disk.perc} :orientation "h" :hexpand true)
+            )
+          )
+        )
+      )
+
+      ;; MÚSICA (AHORA INTERACTIVA)
+      ;; Usamos un botón que envuelve todo el contenido
+      (button :class "music-btn" :onclick "playerctl play-pause"
+        (box :class "card music-box" :orientation "v" :space-evenly false
+          (label :class "music-icon" :text {music.icon} :halign "start")
+          (box :orientation "v" :space-evenly false :class "music-info"
+            (label :class "music-lbl" :text {music.lbl} :halign "start")
+            (label :class "music-title" :text {music.title} :halign "start" :limit-width 10 :show-truncated true)
+            (label :class "music-sub" :text {music.artist} :halign "start" :limit-width 12 :show-truncated true)
+          )
+        )
+      )
+    )
+  )
+)
+
+(defwidget ring_item [val icon color label name]
+  (box :orientation "v" :space-evenly false :class "ring-container"
+    (circular-progress :class "ring ${color}" :value val :thickness 6
+      (label :class "ring-icon" :text icon))
+    (label :class "ring-label" :text label)
+    (label :class "ring-name" :text name)
+  ))

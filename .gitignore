@@ -1,0 +1,11 @@
+# Ignorar secretos y claves
+scripts/secrets.sh
+
+# Ignorar logs y caché de eww
+eww.log
+*.log
+
+# Ignorar archivos temporales del sistema
+.DS_Store
+Thumbs.db
+*~
